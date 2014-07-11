@@ -31,6 +31,8 @@ Public Class WeatherRetrievalService
      timelapse = ScheduleHistoryItem.TimeLapse * 86400
    End Select
 
+   Dim stationsToFollow As Dictionary(Of Integer, StationInfo) = StationsController.GetStationsToFollow
+
    ' JDC server
    Dim data As JDCStationView = JDCWeatherProvider.GetLatestMeasurements
    If data.ErrorMessage = "OK" Then
@@ -50,38 +52,42 @@ Public Class WeatherRetrievalService
       End With
      End If
 
-     ' Find out how long the station hasn't been downloaded
-     Dim secsSinceLastRetrieval As Integer = 86400
-     If Not station.LastSuccessfulRetrieval = DateTime.MinValue Then
-      secsSinceLastRetrieval = CInt(Now.Subtract(station.LastSuccessfulRetrieval).TotalSeconds)
-     End If
+     If stationsToFollow.ContainsKey(station.StationId) Then
 
-     ' What is the oldest measurement we have retrieved already?
-     Dim oldestRecord As DateTime = Now
-     For Each m As JDCMeasurement In ws.Measurements
-      If m.Datime < oldestRecord Then
-       oldestRecord = m.Datime
+      ' Find out how long the station hasn't been downloaded
+      Dim secsSinceLastRetrieval As Integer = 86400
+      If Not station.LastSuccessfulRetrieval = DateTime.MinValue Then
+       secsSinceLastRetrieval = CInt(Now.Subtract(station.LastSuccessfulRetrieval).TotalSeconds)
       End If
-     Next
-     Dim oldestRecordSeconds As Integer = CInt(Now.Subtract(oldestRecord).TotalSeconds)
 
-     ' Now decide if we need to load a full history or not
-     If secsSinceLastRetrieval > 1.5 * timelapse And oldestRecordSeconds < secsSinceLastRetrieval Then ' we failed to retrieve in between values so we will do a full retrieval
-      Dim stationData As JDCDataView = JDCWeatherProvider.GetStationMeasurements(station.Code, secsSinceLastRetrieval)
-      If stationData.ErrorMessage = "OK" Then
-       For Each m As JDCDataMeasurement In stationData.Data.Measurements
-        Dim measurement As New MeasurementInfo With {.Datime = Globals.UnixTimeStampToDateTime(m.UnixTime), .Humidity = m.Humidity, .Pressure = m.Pressure, .StationId = station.StationId, .Temperature = m.Temperature, .WindAverage = m.WindAverage, .WindDirection = m.WindDirection, .WindMaximum = m.WindMaximum}
-        MeasurementsController.AddMeasurement(measurement)
-       Next
-      Else
-       log.AppendFormat("Error retrieving JDC StationData for station {0} for period {1}: {2}" & vbCrLf, station.Code, secsSinceLastRetrieval, data.ErrorMessage)
+      ' What is the oldest measurement we have retrieved already?
+      Dim oldestRecord As DateTime = Now
+      For Each m As JDCMeasurement In ws.Measurements
+       If m.Datime < oldestRecord Then
+        oldestRecord = m.Datime
+       End If
+      Next
+      Dim oldestRecordSeconds As Integer = CInt(Now.Subtract(oldestRecord).TotalSeconds)
+
+      ' Now decide if we need to load a full history or not
+      If secsSinceLastRetrieval > 1.5 * timelapse And oldestRecordSeconds < secsSinceLastRetrieval Then ' we failed to retrieve in between values so we will do a full retrieval
+       Dim stationData As JDCDataView = JDCWeatherProvider.GetStationMeasurements(station.Code, secsSinceLastRetrieval)
+       If stationData.ErrorMessage = "OK" Then
+        For Each m As JDCDataMeasurement In stationData.Data.Measurements
+         Dim measurement As New MeasurementInfo With {.Datime = Globals.UnixTimeStampToDateTime(m.UnixTime), .Humidity = m.Humidity, .Pressure = m.Pressure, .StationId = station.StationId, .Temperature = m.Temperature, .WindAverage = m.WindAverage, .WindDirection = m.WindDirection, .WindMaximum = m.WindMaximum}
+         MeasurementsController.AddMeasurement(measurement)
+        Next
+       Else
+        log.AppendFormat("Error retrieving JDC StationData for station {0} for period {1}: {2}" & vbCrLf, station.Code, secsSinceLastRetrieval, data.ErrorMessage)
+       End If
       End If
-     End If
 
-     For Each m As JDCMeasurement In ws.Measurements
-      Dim measurement As New MeasurementInfo With {.Datime = m.Datime, .Humidity = m.Humidity, .Pressure = m.Pressure, .StationId = station.StationId, .Temperature = m.Temperature, .WindAverage = m.WindAverage, .WindDirection = m.WindDirection, .WindMaximum = m.WindMaximum}
-      MeasurementsController.AddMeasurement(measurement)
-     Next
+      For Each m As JDCMeasurement In ws.Measurements
+       Dim measurement As New MeasurementInfo With {.Datime = m.Datime, .Humidity = m.Humidity, .Pressure = m.Pressure, .StationId = station.StationId, .Temperature = m.Temperature, .WindAverage = m.WindAverage, .WindDirection = m.WindDirection, .WindMaximum = m.WindMaximum}
+       MeasurementsController.AddMeasurement(measurement)
+      Next
+
+     End If ' follow station
 
      ' Update station last retrieval time
      station.LatestStatus = ws.Status
@@ -95,12 +101,12 @@ Public Class WeatherRetrievalService
    End If
 
    Me.ScheduleHistoryItem.Succeeded = True
-   Me.ScheduleHistoryItem.AddLogNote(log.ToString)
+   Me.ScheduleHistoryItem.AddLogNote(log.ToString.Replace(vbCrLf, "<br />"))
 
   Catch ex As Exception
 
    Me.ScheduleHistoryItem.Succeeded = False
-   Me.ScheduleHistoryItem.AddLogNote("Service failed: " & ex.Message & "(" & ex.StackTrace & ")" & vbCrLf & log.ToString)
+   Me.ScheduleHistoryItem.AddLogNote("Service failed: " & ex.Message & "(" & ex.StackTrace & ")<br />" & log.ToString.Replace(vbCrLf, "<br />"))
    Me.Errored(ex)
    LogException(ex)
 
