@@ -13,27 +13,27 @@
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
   <data name="ChartHelp.Text" xml:space="preserve">
-    <value>Last 2 hours wind avg/max and direction</value>
+    <value>Dernière deux heures de vent moy/max et direction</value>
   </data>
   <data name="Details.Text" xml:space="preserve">
-    <value>Details</value>
+    <value>Détails</value>
   </data>
   <data name="Status.Text" xml:space="preserve">
-    <value>Status</value>
+    <value>Statut</value>
   </data>
   <data name="Temperature.Text" xml:space="preserve">
-    <value>Temperature</value>
+    <value>Température</value>
   </data>
   <data name="Time.Text" xml:space="preserve">
-    <value>Time</value>
+    <value>Heure</value>
   </data>
   <data name="WindAvg.Text" xml:space="preserve">
-    <value>Wind (average)</value>
+    <value>Vent (moy)</value>
   </data>
   <data name="WindDir.Text" xml:space="preserve">
-    <value>Wind (direction)</value>
+    <value>Vent (direction)</value>
   </data>
   <data name="WindMax.Text" xml:space="preserve">
-    <value>Wind (max)</value>
+    <value>Vent (max)</value>
   </data>
 </root>
