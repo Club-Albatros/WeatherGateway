@@ -1,0 +1,57 @@
+/******* SPROCS *******/
+IF  EXISTS (SELECT * FROM sys.objects WHERE object_id = OBJECT_ID(N'{databaseOwner}{objectQualifier}WeatherGateway_AddMeasurement') AND type in (N'P', N'PC'))
+DROP PROCEDURE {databaseOwner}{objectQualifier}WeatherGateway_AddMeasurement
+GO
+
+IF  EXISTS (SELECT * FROM sys.objects WHERE object_id = OBJECT_ID(N'{databaseOwner}{objectQualifier}WeatherGateway_AddStation') AND type in (N'P', N'PC'))
+DROP PROCEDURE {databaseOwner}{objectQualifier}WeatherGateway_AddStation
+GO
+
+IF  EXISTS (SELECT * FROM sys.objects WHERE object_id = OBJECT_ID(N'{databaseOwner}{objectQualifier}WeatherGateway_GetLatestMeasurements') AND type in (N'P', N'PC'))
+DROP PROCEDURE {databaseOwner}{objectQualifier}WeatherGateway_GetLatestMeasurements
+GO
+
+IF  EXISTS (SELECT * FROM sys.objects WHERE object_id = OBJECT_ID(N'{databaseOwner}{objectQualifier}WeatherGateway_GetStation') AND type in (N'P', N'PC'))
+DROP PROCEDURE {databaseOwner}{objectQualifier}WeatherGateway_GetStation
+GO
+
+IF  EXISTS (SELECT * FROM sys.objects WHERE object_id = OBJECT_ID(N'{databaseOwner}{objectQualifier}WeatherGateway_GetStationData') AND type in (N'P', N'PC'))
+DROP PROCEDURE {databaseOwner}{objectQualifier}WeatherGateway_GetStationData
+GO
+
+IF  EXISTS (SELECT * FROM sys.objects WHERE object_id = OBJECT_ID(N'{databaseOwner}{objectQualifier}WeatherGateway_GetStations') AND type in (N'P', N'PC'))
+DROP PROCEDURE {databaseOwner}{objectQualifier}WeatherGateway_GetStations
+GO
+
+IF  EXISTS (SELECT * FROM sys.objects WHERE object_id = OBJECT_ID(N'{databaseOwner}{objectQualifier}WeatherGateway_GetStationsToFollow') AND type in (N'P', N'PC'))
+DROP PROCEDURE {databaseOwner}{objectQualifier}WeatherGateway_GetStationsToFollow
+GO
+
+IF  EXISTS (SELECT * FROM sys.objects WHERE object_id = OBJECT_ID(N'{databaseOwner}{objectQualifier}WeatherGateway_UpdateStation') AND type in (N'P', N'PC'))
+DROP PROCEDURE {databaseOwner}{objectQualifier}WeatherGateway_UpdateStation
+GO
+
+/******* VIEWS *******/
+/******* FUNCTIONS *******/
+/******* TRIGGERS *******/
+/******* STRUCTURE *******/
+IF  EXISTS (SELECT * FROM sys.foreign_keys WHERE object_id = OBJECT_ID(N'{databaseOwner}FK_{objectQualifier}WeatherGateway_Measurements_Stations') AND parent_object_id = OBJECT_ID(N'{databaseOwner}{objectQualifier}WeatherGateway_Measurements'))
+ALTER TABLE {databaseOwner}{objectQualifier}WeatherGateway_Measurements DROP CONSTRAINT FK_{objectQualifier}WeatherGateway_Measurements_Stations
+GO
+
+/******* TABLES *******/
+IF  EXISTS (SELECT * FROM sys.objects WHERE object_id = OBJECT_ID(N'{databaseOwner}{objectQualifier}WeatherGateway_Measurements') AND type in (N'U'))
+DROP TABLE {databaseOwner}{objectQualifier}WeatherGateway_Measurements
+GO
+
+IF  EXISTS (SELECT * FROM sys.objects WHERE object_id = OBJECT_ID(N'{databaseOwner}{objectQualifier}WeatherGateway_Stations') AND type in (N'U'))
+DROP TABLE {databaseOwner}{objectQualifier}WeatherGateway_Stations
+GO
+
+/******* SCHEDULE *******/
+
+DELETE FROM {databaseOwner}[{objectQualifier}Schedule]
+WHERE [TypeFullName]='Albatros.DNN.Modules.WeatherGateway.WeatherRetrievalService, ALBATROS.DNN.MODULES.WEATHERGATEWAY'
+GO
+
+

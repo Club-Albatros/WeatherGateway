@@ -1,0 +1,26 @@
+IF  EXISTS (SELECT * FROM sys.objects WHERE object_id = OBJECT_ID(N'{databaseOwner}{objectQualifier}WeatherGateway_GetStationData') AND type in (N'P', N'PC'))
+DROP PROCEDURE {databaseOwner}{objectQualifier}WeatherGateway_GetStationData
+GO
+
+SET ANSI_NULLS ON
+GO
+SET QUOTED_IDENTIFIER ON
+GO
+CREATE PROCEDURE {databaseOwner}{objectQualifier}WeatherGateway_GetStationData
+ @StationID INT,
+ @Hours INT
+AS
+SELECT
+ m.Datime,
+ CAST(m.WindAverage + 0.5 AS INT) WA,
+ CAST(m.WindMaximum + 0.5 AS INT) WM,
+ CAST((CAST(m.WindDirection AS FLOAT)/5)+0.5 AS INT)*5 WD
+FROM
+ {databaseOwner}{objectQualifier}WeatherGateway_Measurements m
+WHERE
+ m.StationId=@StationId
+ AND m.Datime BETWEEN DATEADD(hour, -1 * @Hours, GETDATE()) AND GETDATE()
+ORDER BY
+ m.Datime
+GO
+

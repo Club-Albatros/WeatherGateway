@@ -12,6 +12,8 @@ Public Class WeatherGateway
   rpStations.DataSource = Settings.StationsToShow.Values
   rpStations.DataBind()
 
+  AddWeatherGatewayService()
+
  End Sub
 
  Public Function LatestMeasurement(stationId As Integer) As MeasurementInfo

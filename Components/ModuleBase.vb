@@ -52,7 +52,7 @@ Public Class ModuleBase
    script.AppendLine("//]]>")
    script.AppendLine("</script>")
    DotNetNuke.UI.Utilities.ClientAPI.RegisterClientScriptBlock(Page, "WeatherGatewayAppPath", script.ToString)
-   AddConcoursService()
+   AddWeatherGatewayService()
 
    Context.Items("WeatherGatewayModuleBaseInitialized") = True
   End If
@@ -61,24 +61,24 @@ Public Class ModuleBase
 #End Region
 
 #Region " Public Methods "
- Public Sub AddConcoursService()
+ Public Sub AddWeatherGatewayService()
 
   If Context.Items("WeatherGatewayServiceAdded") Is Nothing Then
    DotNetNuke.Framework.jQuery.RequestDnnPluginsRegistration()
    DotNetNuke.Framework.ServicesFramework.Instance.RequestAjaxScriptSupport()
    DotNetNuke.Framework.ServicesFramework.Instance.RequestAjaxAntiForgerySupport()
-   AddJavascriptFile("Albatros.WeatherGateway.js", 70)
+   AddJavascriptFile("albatros.weathergateway.js", 70)
    Context.Items("WeatherGatewayServiceAdded") = True
   End If
 
  End Sub
 
  Public Sub AddJavascriptFile(jsFilename As String, priority As Integer)
-  ClientResourceManager.RegisterScript(Page, ResolveUrl("~/DesktopModules/E:/Websites/www.albatros.dev/www/DesktopModules/Albatros/WeatherGateway/WeatherGateway/js/" & jsFilename), priority)
+  ClientResourceManager.RegisterScript(Page, ResolveUrl("~/DesktopModules/Albatros/WeatherGateway/js/" & jsFilename), priority)
  End Sub
 
  Public Sub AddCssFile(cssFilename As String)
-  ClientResourceManager.RegisterStyleSheet(Page, ResolveUrl("~/DesktopModules/E:/Websites/www.albatros.dev/www/DesktopModules/Albatros/WeatherGateway/WeatherGateway/css/" & cssFilename), DotNetNuke.Web.Client.FileOrder.Css.ModuleCss)
+  ClientResourceManager.RegisterStyleSheet(Page, ResolveUrl("~/DesktopModules/Albatros/WeatherGateway/css/" & cssFilename), DotNetNuke.Web.Client.FileOrder.Css.ModuleCss)
  End Sub
 
  Public Function LocalizeJSString(resourceKey As String) As String

@@ -1,5 +1,7 @@
-﻿.stationStats 
+﻿.stationStats, .stationGraph
 {
+ float: left;
+ width: 50%;
 }
 .stationStats div span 
 {
@@ -8,6 +10,10 @@
  font-weight: bold;
 }
 .stationStats div
+{
+ clear:both;
+}
+.clear
 {
  clear:both;
 }
