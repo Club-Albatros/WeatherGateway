@@ -71,15 +71,20 @@ Public Class WeatherRetrievalService
 
       ' Now decide if we need to load a full history or not
       If secsSinceLastRetrieval > 1.5 * timelapse And oldestRecordSeconds < secsSinceLastRetrieval Then ' we failed to retrieve in between values so we will do a full retrieval
-       Dim stationData As JDCDataView = JDCWeatherProvider.GetStationMeasurements(station.Code, secsSinceLastRetrieval)
-       If stationData.ErrorMessage = "OK" Then
-        For Each m As JDCDataMeasurement In stationData.Data.Measurements
-         Dim measurement As New MeasurementInfo With {.Datime = Globals.UnixTimeStampToDateTime(m.UnixTime), .Humidity = m.Humidity, .Pressure = m.Pressure, .StationId = station.StationId, .Temperature = m.Temperature, .WindAverage = m.WindAverage, .WindDirection = m.WindDirection, .WindMaximum = m.WindMaximum}
-         MeasurementsController.AddMeasurement(measurement)
-        Next
-       Else
-        log.AppendFormat("Error retrieving JDC StationData for station {0} for period {1}: {2}" & vbCrLf, station.Code, secsSinceLastRetrieval, data.ErrorMessage)
-       End If
+       Try
+        Dim stationData As JDCDataView = JDCWeatherProvider.GetStationMeasurements(station.Code, secsSinceLastRetrieval)
+        If stationData.ErrorMessage = "OK" Then
+         For Each m As JDCDataMeasurement In stationData.Data.Measurements
+          Dim measurement As New MeasurementInfo With {.Datime = Globals.UnixTimeStampToDateTime(m.UnixTime), .Humidity = m.Humidity, .Pressure = m.Pressure, .StationId = station.StationId, .Temperature = m.Temperature, .WindAverage = m.WindAverage, .WindDirection = m.WindDirection, .WindMaximum = m.WindMaximum}
+          MeasurementsController.AddMeasurement(measurement)
+         Next
+        Else
+         log.AppendFormat("Error retrieving JDC StationData for station {0} for period {1}: {2}" & vbCrLf, station.Code, secsSinceLastRetrieval, data.ErrorMessage)
+        End If
+       Catch ex As Exception
+        log.AppendFormat("Error retrieving JDC StationData for station {0} for period {1}: {2}" & vbCrLf, station.Code, secsSinceLastRetrieval, ex.Message)
+        log.AppendLine(ex.StackTrace)
+       End Try
       End If
 
       For Each m As JDCMeasurement In ws.Measurements
