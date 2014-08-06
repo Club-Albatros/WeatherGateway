@@ -10,7 +10,7 @@
    <div><span><%= LocalizeString("WindMax")%></span> <%# LatestMeasurement(Eval("StationId")).WindMaximum.ToString("0") %> km/h</div>
    <div><span><%= LocalizeString("Temperature") %></span> <%# LatestMeasurement(Eval("StationId")).Temperature.ToString("0.0") %></div>
    <div><span><%= LocalizeString("Status")%></span> <%# Eval("LatestStatus") %></div>
-   <div><span><%= LocalizeString("Details") %></span> <a href="<%# Eval("Code", "http://meteo.jdc.ch/station/?id={0}") %>" target="_blank"><%# Eval("Code", "http://meteo.jdc.ch/station/?id={0}") %></a></div>
+   <div><span><%= LocalizeString("Details") %></span> <a href="<%# Eval("Code", "http://meteo.jdc.ch/station/{0}/") %>" target="_blank"><%# Eval("Code", "http://meteo.jdc.ch/station/{0}/")%></a></div>
   </div>
   <div class="stationGraph">
   <canvas id="graph<%# Eval("StationId") %>" data-value="<%# Eval("StationId") %>" width="150" height="150" title="<%= LocalizeString("ChartHelp")%>">Data
