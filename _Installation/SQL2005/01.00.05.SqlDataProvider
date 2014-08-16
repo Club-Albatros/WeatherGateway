@@ -1,0 +1,78 @@
+ALTER TABLE dbo.WeatherGateway_Stations ADD
+	Deco varchar(50) NULL,
+	ViewOrder int NOT NULL DEFAULT 0
+GO
+
+IF EXISTS (select * from dbo.sysobjects where id = object_id(N'{databaseOwner}{objectQualifier}WeatherGateway_AddStation') and OBJECTPROPERTY(id, N'IsProcedure') = 1)
+DROP PROCEDURE {databaseOwner}{objectQualifier}WeatherGateway_AddStation
+GO
+
+CREATE PROCEDURE {databaseOwner}{objectQualifier}WeatherGateway_AddStation
+ @Altitude INT, 
+ @Code NVARCHAR (50), 
+ @Deco VARCHAR (50), 
+ @LastSuccessfulRetrieval DATETIME, 
+ @LatestStatus NVARCHAR (100), 
+ @Latitude FLOAT, 
+ @Longitude FLOAT, 
+ @Name NVARCHAR (100), 
+ @Provider VARCHAR (10), 
+ @SMSCode VARCHAR (10), 
+ @ViewOrder INT
+AS
+
+INSERT INTO {databaseOwner}{objectQualifier}WeatherGateway_Stations (
+ [Altitude],
+ [Code],
+ [Deco],
+ [LastSuccessfulRetrieval],
+ [LatestStatus],
+ [Latitude],
+ [Longitude],
+ [Name],
+ [Provider],
+ [SMSCode],
+ [ViewOrder]
+)
+ VALUES ( @Altitude, @Code, @Deco, @LastSuccessfulRetrieval, @LatestStatus, @Latitude, @Longitude, @Name, @Provider, @SMSCode, @ViewOrder)
+
+
+select SCOPE_IDENTITY()
+GO
+
+
+IF EXISTS (select * from dbo.sysobjects where id = object_id(N'{databaseOwner}{objectQualifier}WeatherGateway_UpdateStation') and OBJECTPROPERTY(id, N'IsProcedure') = 1)
+DROP PROCEDURE {databaseOwner}{objectQualifier}WeatherGateway_UpdateStation
+GO
+
+CREATE PROCEDURE {databaseOwner}{objectQualifier}WeatherGateway_UpdateStation
+ @Altitude INT, 
+ @Code NVARCHAR (50), 
+ @Deco VARCHAR (50), 
+ @LastSuccessfulRetrieval DATETIME, 
+ @LatestStatus NVARCHAR (100), 
+ @Latitude FLOAT, 
+ @Longitude FLOAT, 
+ @Name NVARCHAR (100), 
+ @Provider VARCHAR (10), 
+ @SMSCode VARCHAR (10), 
+ @StationId INT, 
+ @ViewOrder INT
+AS
+
+UPDATE {databaseOwner}{objectQualifier}WeatherGateway_Stations SET
+ [Altitude] = @Altitude,
+ [Code] = @Code,
+ [Deco] = @Deco,
+ [LastSuccessfulRetrieval] = @LastSuccessfulRetrieval,
+ [LatestStatus] = @LatestStatus,
+ [Latitude] = @Latitude,
+ [Longitude] = @Longitude,
+ [Name] = @Name,
+ [Provider] = @Provider,
+ [SMSCode] = @SMSCode,
+ [ViewOrder] = @ViewOrder
+WHERE
+ [StationId] = @StationId
+GO
+
