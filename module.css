@@ -38,3 +38,7 @@
  min-width: 200px;
  padding: 5px;
 }
+.wg_smalltext
+{
+ font-size:smaller;
+}

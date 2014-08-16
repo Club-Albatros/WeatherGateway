@@ -6,7 +6,10 @@
   <li id="station_<%# Eval("StationId")%>" class="ui-state-default wg_station">
    <div class="wg_editrowdiv"><%# Eval("Name")%></div>
    <div class="wg_editrowdiv"><asp:TextBox runat="server" ID="txtSMS" Width="100" /></div>
-   <div class="wg_editrowdiv"><asp:TextBox runat="server" ID="txtDeco" Width="200" /></div>
+   <div class="wg_editrowdiv"><asp:TextBox runat="server" ID="txtDeco" Width="200" /></div><br />
+   <div class="wg_editrowdiv wg_smalltext">&nbsp;</div>
+   <div class="wg_editrowdiv wg_smalltext"><%= LocalizeString("SMSCode") %></div>
+   <div class="wg_editrowdiv wg_smalltext"><%= LocalizeString("Deco") %></div>
    <asp:HiddenField runat="server" ID="hidStationId" />
   </li>
  </ItemTemplate>
