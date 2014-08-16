@@ -27,6 +27,10 @@ IF  EXISTS (SELECT * FROM sys.objects WHERE object_id = OBJECT_ID(N'{databaseOwn
 DROP PROCEDURE {databaseOwner}{objectQualifier}WeatherGateway_GetStationsToFollow
 GO
 
+IF  EXISTS (SELECT * FROM sys.objects WHERE object_id = OBJECT_ID(N'{databaseOwner}{objectQualifier}WeatherGateway_ReorderStations') AND type in (N'P', N'PC'))
+DROP PROCEDURE {databaseOwner}{objectQualifier}WeatherGateway_ReorderStations
+GO
+
 IF  EXISTS (SELECT * FROM sys.objects WHERE object_id = OBJECT_ID(N'{databaseOwner}{objectQualifier}WeatherGateway_UpdateStation') AND type in (N'P', N'PC'))
 DROP PROCEDURE {databaseOwner}{objectQualifier}WeatherGateway_UpdateStation
 GO
