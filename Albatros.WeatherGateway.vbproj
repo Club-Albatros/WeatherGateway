@@ -138,6 +138,13 @@
     <Compile Include="Components\Providers\JDC\JDCWeatherProvider.vb" />
     <Compile Include="Components\WeatherGatewayTokenReplace.vb" />
     <Compile Include="Components\WeatherRetrievalService.vb" />
+    <Compile Include="EditStations.ascx.designer.vb">
+      <DependentUpon>EditStations.ascx</DependentUpon>
+    </Compile>
+    <Compile Include="EditStations.ascx.vb">
+      <DependentUpon>EditStations.ascx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
     <Compile Include="Settings.ascx.designer.vb">
       <DependentUpon>Settings.ascx</DependentUpon>
     </Compile>
@@ -152,6 +159,7 @@
       <DependentUpon>WeatherGateway.ascx</DependentUpon>
       <SubType>ASPXCodeBehind</SubType>
     </Compile>
+    <Content Include="EditStations.ascx" />
     <Content Include="js\albatros.weathergateway.js" />
     <Content Include="WeatherGateway.ascx" />
     <None Include="_Installation\Albatros.WeatherGateway.dnn" />

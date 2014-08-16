@@ -21,6 +21,10 @@
  </ItemTemplate>
 </asp:Repeater>
 
+<div class="wg_buttonbar" runat="server" id="divManagement" visible="false">
+ <asp:Button runat="server" ID="cmdEditStations" resourcekey="EditStations" class="dnnPrimaryAction" />
+</div>
+
 <script type="text/javascript">
 (function ($, Sys) {
 

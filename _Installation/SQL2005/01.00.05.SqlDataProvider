@@ -76,3 +76,15 @@ WHERE
  [StationId] = @StationId
 GO
 
+CREATE PROCEDURE {databaseOwner}{objectQualifier}WeatherGateway_ReorderStations
+ @PortalId INT,
+ @StationOrder VARCHAR(300)
+AS
+UPDATE {databaseOwner}{objectQualifier}WeatherGateway_Stations
+SET ViewOrder = ord.RowNumber
+FROM {databaseOwner}{objectQualifier}WeatherGateway_Stations s
+ INNER JOIN (SELECT RecordID,
+                    ROW_NUMBER() OVER(ORDER BY (SELECT 0)) AS RowNumber
+             FROM {databaseOwner}{objectQualifier}SplitDelimitedIDs(@StationOrder, '&')) ord ON ord.RecordID = s.StationId
+GO
+

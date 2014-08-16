@@ -11,7 +11,7 @@ Option Strict On
 Option Explicit On
 
 
-Partial Public Class WeatherGateway
+Partial Public Class EditStations
 
  '''<summary>
  '''rpStations control.
@@ -23,20 +23,20 @@ Partial Public Class WeatherGateway
  Protected WithEvents rpStations As Global.System.Web.UI.WebControls.Repeater
 
  '''<summary>
- '''divManagement control.
+ '''cmdUpdate control.
  '''</summary>
  '''<remarks>
  '''Auto-generated field.
  '''To modify move field declaration from designer file to code-behind file.
  '''</remarks>
- Protected WithEvents divManagement As Global.System.Web.UI.HtmlControls.HtmlGenericControl
+ Protected WithEvents cmdUpdate As Global.System.Web.UI.WebControls.Button
 
  '''<summary>
- '''cmdEditStations control.
+ '''cmdCancel control.
  '''</summary>
  '''<remarks>
  '''Auto-generated field.
  '''To modify move field declaration from designer file to code-behind file.
  '''</remarks>
- Protected WithEvents cmdEditStations As Global.System.Web.UI.WebControls.Button
+ Protected WithEvents cmdCancel As Global.System.Web.UI.WebControls.Button
 End Class

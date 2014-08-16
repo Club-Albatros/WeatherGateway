@@ -66,6 +66,10 @@ Public Class ModuleSettings
 
  End Function
 
+ Public Sub ClearCache()
+  DotNetNuke.Common.Utilities.DataCache.ClearCache(CacheKey(ModuleId))
+ End Sub
+
  Public Shared Function CacheKey(moduleId As Integer) As String
   Return String.Format("SettingsModule{0}", moduleId)
  End Function
