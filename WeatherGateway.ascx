@@ -13,7 +13,7 @@
    <div><span><%= LocalizeString("Details") %></span> <a href="<%# Eval("Code", "http://meteo.jdc.ch/station/{0}/") %>" target="_blank"><%# Eval("Code", "http://meteo.jdc.ch/station/{0}/")%></a></div>
   </div>
   <div class="stationGraph">
-  <canvas id="graph<%# Eval("StationId") %>" data-value="<%# Eval("StationId") %>" width="150" height="150" title="<%= LocalizeString("ChartHelp")%>">Data
+  <canvas id="graph<%# Eval("StationId") %>" data-value="<%# Eval("StationId") %>" data-deco="<%# Eval("Deco") %>" width="150" height="150" title="<%= LocalizeString("ChartHelp")%>">Data
   </canvas>
   </div>
   <div class="clear">
@@ -37,6 +37,8 @@
   }, <%= ModuleId %>);
 
   $.each($('.stationGraph canvas'), function(index, element) {
+   var decos = $(this).attr('data-deco').split(';');
+   
    if ($(this)[0].getContext) {
     var ctx = $(this)[0].getContext("2d");
     ctx.fillStyle = '#E6EDF7';
@@ -61,8 +63,21 @@
     ctx.stroke();
     ctx.fillStyle = '#0053C7';
     ctx.fillRect(75,75,1,1);
-    ctx.strokeStyle = '#FF5252';
-    ctx.lineWidth = 2;
+
+    for (var i=0; i < decos.length; i++) {
+     if (decos[i] != '') {
+      var angles = decos[i].split('-');
+      ctx.beginPath();
+      ctx.moveTo(75, 75);
+      ctx.arc(75, 75, 70, 
+                Math.PI * angles[0]/180 - Math.PI/2, Math.PI * angles[1]/180 - Math.PI/2, false)
+      ctx.closePath();
+      ctx.fillStyle = 'rgba(128, 128, 128, 0.5)';
+      ctx.fill();
+      ctx.restore();
+     }
+    }
+
     service.getStationData($(this).attr('data-value'), 2, function(data) {
      $.each(data, function(i, elem) {
       var h1 = elem.WA * 2;
@@ -73,6 +88,9 @@
       if (h2 > 70) {h2=70};
       var y2 = Math.cos(Math.PI * elem.WD/180) * h2;
       var x2 = Math.sin(Math.PI * elem.WD/180) * h2;
+      ctx.strokeStyle = '#FF5252';
+      ctx.globalAlpha = Math.pow(i/data.length, 2);
+      ctx.lineWidth = 2;
       ctx.beginPath();
       ctx.moveTo(75 - y1, 75 + x1);
       ctx.lineTo(75 - y2, 75 + x2);
