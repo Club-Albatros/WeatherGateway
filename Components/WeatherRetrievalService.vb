@@ -32,6 +32,7 @@ Public Class WeatherRetrievalService
    End Select
 
    Dim stationsToFollow As Dictionary(Of Integer, StationInfo) = StationsController.GetStationsToFollow
+   Dim stationsOnline As New List(Of Integer)
 
    ' JDC server
    Dim data As JDCStationView = JDCWeatherProvider.GetLatestMeasurements
@@ -51,6 +52,8 @@ Public Class WeatherRetrievalService
        .Name = ws.Name
       End With
      End If
+
+     stationsOnline.Add(station.StationId)
 
      If stationsToFollow.ContainsKey(station.StationId) Then
 
@@ -101,6 +104,21 @@ Public Class WeatherRetrievalService
      log.AppendFormat("Finished retrieving JDC Station {0} ({1})" & vbCrLf, station.Name, station.Code)
 
     Next
+
+    For Each station As StationInfo In stationsToFollow.Values
+     If stationsOnline.Contains(station.StationId) Then
+      If station.LatestStatus <> "online" Then
+       station.LatestStatus = "online"
+       StationsController.UpdateStation(station)
+      End If
+     Else
+      If station.LatestStatus = "online" Then
+       station.LatestStatus = "offline"
+       StationsController.UpdateStation(station)
+      End If
+     End If
+    Next
+
    Else
     log.AppendFormat("Error retrieving JDC StationView: {0}" & vbCrLf, data.ErrorMessage)
    End If
