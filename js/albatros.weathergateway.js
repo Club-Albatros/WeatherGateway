@@ -54,7 +54,7 @@ function drawChart(stationId, ctx, ctrX, ctrY, outerRad, speedStep, speedFactor,
   ctx.arc(ctrX, ctrY, st, 0, 2 * Math.PI, false);
   ctx.stroke();
   ctx.textAlign = 'right';
-  ctx.font = ((speedStep * speedFactor)/2).toFixed(0) + 'px Helvetica';
+  ctx.font = ((speedStep * speedFactor) / 2).toFixed(0) + 'px Helvetica';
   ctx.fillText((st / speedFactor).toFixed(0), ctrX + st - 1, ctrY + (speedStep * speedFactor) / 8);
   st += speedStep * speedFactor;
  }
@@ -78,18 +78,18 @@ function drawChart(stationId, ctx, ctrX, ctrY, outerRad, speedStep, speedFactor,
   $.each(data, function (i, elem) {
    var h1 = elem.WA * speedFactor;
    if (h1 > outerRad) { h1 = outerRad };
-   var y1 = Math.cos(Math.PI * elem.WD / 180) * h1;
-   var x1 = Math.sin(Math.PI * elem.WD / 180) * h1;
+   var x1 = Math.cos(Math.PI * (90 - elem.WD) / 180) * h1;
+   var y1 = Math.sin(Math.PI * (90 - elem.WD) / 180) * h1;
    var h2 = elem.WM * speedFactor;
    if (h2 > outerRad) { h2 = outerRad };
-   var y2 = Math.cos(Math.PI * elem.WD / 180) * h2;
-   var x2 = Math.sin(Math.PI * elem.WD / 180) * h2;
+   var x2 = Math.cos(Math.PI * (90 - elem.WD) / 180) * h2;
+   var y2 = Math.sin(Math.PI * (90 - elem.WD) / 180) * h2;
    ctx.strokeStyle = '#FF5252';
    ctx.globalAlpha = Math.pow(i / data.length, 2);
    ctx.lineWidth = 2;
    ctx.beginPath();
-   ctx.moveTo(ctrX - y1, ctrY + x1);
-   ctx.lineTo(ctrX - y2, ctrY + x2);
+   ctx.moveTo(ctrX + x1, ctrY - y1);
+   ctx.lineTo(ctrX + x2, ctrY - y2);
    ctx.stroke();
    ctx.closePath();
    if (i == data.length - 1) {
@@ -98,7 +98,7 @@ function drawChart(stationId, ctx, ctrX, ctrY, outerRad, speedStep, speedFactor,
     ctx.lineWidth = 3;
     ctx.beginPath();
     ctx.moveTo(ctrX, ctrY);
-    ctx.lineTo(ctrX - y1, ctrY + x1);
+    ctx.lineTo(ctrX + x1, ctrY - y1);
     ctx.stroke();
     ctx.closePath();
    }
